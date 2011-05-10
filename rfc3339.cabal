@@ -1,0 +1,50 @@
+Name:          rfc3339
+Version:       1.0.0
+Category:      Web, Time
+Synopsis:      Parse and display time according to RFC 3339
+Description:   
+  .
+  Parse and display time according to 
+  RFC 3339 <http://www.ietf.org/rfc/rfc3339.txt>.
+  This package defines a type class to parse and read RFC 3339 from different
+  data types. 
+  .
+  Right now there is only support for reading and showing String.
+  .
+  Example of usage:
+  > 
+  > import Data.Time.LocalTime
+  > 
+  > showTime :: IO String
+  > showTime = getZonedTime >>= return . showRFC3339
+  >
+  > example1 = "1985-04-12T23:20:50.52Z"
+  > example2 = "1996-12-19T16:39:57-08:00"
+  > example3 = "1990-12-31T23:59:60Z"
+  > example4 = "1990-12-31T15:59:60-08:00"
+  > example5 = "1937-01-01T12:00:27.87+00:20"
+  > examples = [example1,example2,exmaple3,example4,example5]
+  >
+  > readAll = map readRFC3339 examples
+  .
+  For more information please read the documentation of the module 
+  bellow.
+Build-type:    Simple
+Maintainer:    Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
+Author:        Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
+Copyright:     Hugo Daniel Gomes
+Cabal-version: >= 1.6
+License:       BSD3
+License-file:  LICENSE
+source-repository head                                                             
+  type:     git                                                                    
+  location: git://github.com/HugoDaniel/RFC3339.git
+
+library
+  build-depends:
+    base < 5, time >= 1.2, old-locale
+
+  exposed-modules:
+    Data.Time.RFC3339
+
+  extensions: TypeSynonymInstances
