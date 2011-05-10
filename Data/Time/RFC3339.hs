@@ -13,6 +13,7 @@
 
 module Data.Time.RFC3339 (
     -- * Basic type class
+    -- $basic
     RFC3339(showRFC3339, readRFC3339)
 ) where
 
@@ -32,6 +33,23 @@ testParse = length (catMaybes (map readRFC3339 tests)) == length tests
 
 -- ----------------------------------------------------------------------------
 -- The RFC3339 class definition
+
+-- $basic
+--  Example of usage:
+--  >
+--  > import Data.Time.LocalTime
+--  >
+--  > showTime :: IO String
+--  > showTime = getZonedTime >>= return . showRFC3339
+--  >
+--  > example1 = "1985-04-12T23:20:50.52Z"
+--  > example2 = "1996-12-19T16:39:57-08:00"
+--  > example3 = "1990-12-31T23:59:60Z"
+--  > example4 = "1990-12-31T15:59:60-08:00"
+--  > example5 = "1937-01-01T12:00:27.87+00:20"
+--  > examples = [example1,example2,example3,example4,example5]
+--  >
+--  > readAll = map readRFC3339 examples
 
 -- | This class is here to allow future support for other data types 
 -- like Data.Text or Data.ByteString if that becomes necessary
