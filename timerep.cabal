@@ -1,18 +1,17 @@
-Name:          rfc3339
-Version:       1.0.3
+Name:          timerep
+Version:       1.0.0
 Category:      Web, Time
-Synopsis:      Parse and display time according to RFC3339
+Synopsis:      Parse and display time according to some RFCs (RFC3339, RFC2822)
 Description:   
     .
-    Parse and display time according to RFC3339: 
-    <http://www.ietf.org/rfc/rfc3339.txt>
+    Parse and display time according to some RFC's.
+    Supported: 
+    RFC3339 <http://www.ietf.org/rfc/rfc3339.txt>
+    RFC2822 <http://www.ietf.org/rfc/rfc2822.txt>
     .
-    This package defines a type class to parse and read RFC 3339 from different
-    data types. 
+    This package defines a type class to parse and read time representations 
+    specified in some RFC's.
     Right now there is only support for reading and showing String
-    .
-    For more information and usage examples please read the documentation of 
-    the module bellow.
     .
 Build-type:    Simple
 Maintainer:    Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
@@ -31,5 +30,6 @@ library
 
   exposed-modules:
     Data.Time.RFC3339
+    Data.Time.RFC2822
 
   extensions: TypeSynonymInstances
