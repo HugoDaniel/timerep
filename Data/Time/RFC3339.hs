@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 -- |                                                                               
 -- Module      : Data.Time.RFC3339
 -- Copyright   : (c) 2011 Hugo Daniel Gomes

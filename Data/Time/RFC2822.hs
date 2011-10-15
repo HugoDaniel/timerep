@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 -- |                                                                               
 -- Module      : Data.Time.RFC2822
 -- Copyright   : (c) 2011 Hugo Daniel Gomes
@@ -18,19 +18,22 @@
 -- > showTime :: IO String
 -- > showTime = getZonedTime >>= return . showRFC2822
 -- >
--- > example1 = "1985-04-12T23:20:50.52Z"
--- > example2 = "1996-12-19T16:39:57-08:00"
--- > example3 = "1990-12-31T23:59:60Z"
--- > example4 = "1990-12-31T15:59:60-08:00"
--- > example5 = "1937-01-01T12:00:27.87+00:20"
--- > examples = [example1,example2,example3,example4,example5]
+-- > example1 = "Fri, 21 Nov 1997 09:55:06 -0600"
+-- > example2 = "Tue, 15 Nov 1994 12:45:26 GMT"
+-- > example3 = "Tue, 1 Jul 2003 10:52:37 +0200"
+-- > example4 = "Thu, 13 Feb 1969 23:32:54 -0330"
+-- > example5 = "Mon, 24 Nov 1997 14:22:01 -0800"
+-- > example6 = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330"
+-- > example7 = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
+-- > example8 = "24 Nov 1997 14:22:01 -0800"
+-- > examples = [example1,example2,example3,example4,example5,example6,example7,example8]
 -- >
--- > readAll = map readRFC3339 examples
+-- > readAll = map readRFC2822 examples
 
 module Data.Time.RFC2822 (
     -- * Basic type class
     -- $basic
-    -- TODO: RFC2822(showRFC2822, readRFC2822)
+    RFC2822(showRFC2822, readRFC2822)
 ) where
 
 import Data.Time.Format
@@ -39,16 +42,19 @@ import Data.Time.Calendar
 import Data.Maybe 
 import System.Locale
 
-test1 = "Fri, 21 Nov 1997 09:55:06 -0600"
-test2 = "Tue, 15 Nov 1994 12:45:26 GMT"
-test3 = "Tue, 1 Jul 2003 10:52:37 +0200"
-test4 = "Thu, 13 Feb 1969 23:32:54 -0330"
-test5 = "Mon, 24 Nov 1997 14:22:01 -0800"
-test6 = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330"
-test7 = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
-test8 = "24 Nov 1997 14:22:01 -0800"
-test9 = "15 Nov 1994 12:45:26 GMT"
-tests = [test1, test2, test3, test4, test5, test6, test7, test8, test9]
+test1  = "Fri, 21 Nov 1997 09:55:06 -0600"
+test2  = "Tue, 15 Nov 1994 12:45:26 GMT"
+test3  = "Tue, 1 Jul 2003 10:52:37 +0200"
+test4  = "Thu, 13 Feb 1969 23:32:54 -0330"
+test5  = "Mon, 24 Nov 1997 14:22:01 -0800"
+test6  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330"
+test7  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
+test8  = "24 Nov 1997 14:22:01 -0800"
+test9  = "15 Nov 1994 12:45:26 GMT"
+test10 = "Mon,24 Nov 1997 14:22:01 -0800"
+test11 = "Thu,\t13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
+tests = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10
+        , test11]
 testParse = length (catMaybes (map readRFC2822 tests)) == length tests
 
 -- ----------------------------------------------------------------------------
@@ -70,12 +76,12 @@ instance RFC2822 String where
                     then " GMT"
                     else " " ++ timeZoneStr
 
-  readRFC2822 t = foldr (tryP t) Nothing [ p "%a, %e %b %Y %T GMT"
-                                         , p "%a, %e %b %Y %T %z"
-                                         , p "%e %b %Y %T GMT"
-                                         , p "%e %b %Y %T %z"
-                                         -- , p "%FT%T%QZ"
-                                         ]
+  readRFC2822 t = foldr (tryP t') Nothing [ p "%a, %e %b %Y %T GMT"
+                                          , p "%a, %e %b %Y %T %z"
+                                          , p "%e %b %Y %T GMT"
+                                          , p "%e %b %Y %T %z"
+                                          -- , p "%FT%T%QZ"
+                                          ]
     where 
       p :: String -> String -> Maybe ZonedTime
       p f s = parseTime defaultTimeLocale f s
@@ -83,6 +89,11 @@ instance RFC2822 String where
       tryP :: String -> (String -> Maybe a) -> Maybe a -> Maybe a
       tryP s f acc | isJust acc = acc
                    | otherwise = f s
+
+      -- t' is a trimmed t (currently only \n is trimmed)
+      -- TODO: trim other white space characters 
+      t' :: String
+      t' = lines t >>= ("" ++)
 
 showTime :: IO String
 showTime = getZonedTime >>= return . showRFC2822
