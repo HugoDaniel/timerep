@@ -41,6 +41,9 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import Data.Maybe 
 import System.Locale
+import qualified Data.Attoparsec.Text as A
+import Data.Attoparsec.Text
+import qualified Data.Attoparsec.Combinator as AC
 
 test1  = "Fri, 21 Nov 1997 09:55:06 -0600"
 test2  = "Tue, 15 Nov 1994 12:45:26 GMT"
@@ -48,13 +51,15 @@ test3  = "Tue, 1 Jul 2003 10:52:37 +0200"
 test4  = "Thu, 13 Feb 1969 23:32:54 -0330"
 test5  = "Mon, 24 Nov 1997 14:22:01 -0800"
 test6  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330"
-test7  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
+test7  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)" -- Fails
 test8  = "24 Nov 1997 14:22:01 -0800"
 test9  = "15 Nov 1994 12:45:26 GMT"
 test10 = "Mon,24 Nov 1997 14:22:01 -0800"
-test11 = "Thu,\t13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"
+test11 = "Thu,\t13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"  -- Fails
+test12 = "Thu, 13 Feb 1969 23:32 -0330 (Newfoundland Time)"  -- Fails
+tests :: [String]
 tests = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10
-        , test11]
+        , test11, test12]
 testParse = length (catMaybes (map readRFC2822 tests)) == length tests
 
 -- ----------------------------------------------------------------------------
@@ -65,6 +70,7 @@ testParse = length (catMaybes (map readRFC2822 tests)) == length tests
 class RFC2822 a where
   showRFC2822 :: ZonedTime -> a
   readRFC2822 :: a -> Maybe ZonedTime
+  formatRFC2822 :: [a]
 
 -- | For now there is only an instance for the String data type
 instance RFC2822 String where
@@ -76,12 +82,18 @@ instance RFC2822 String where
                     then " GMT"
                     else " " ++ timeZoneStr
 
-  readRFC2822 t = foldr (tryP t') Nothing [ p "%a, %e %b %Y %T GMT"
-                                          , p "%a, %e %b %Y %T %z"
-                                          , p "%e %b %Y %T GMT"
-                                          , p "%e %b %Y %T %z"
-                                          -- , p "%FT%T%QZ"
-                                          ]
+  formatRFC2822 = [ "%a, %e %b %Y %T GMT"
+                  , "%a, %e %b %Y %T %z"
+                  , "%e %b %Y %T GMT"
+                  , "%e %b %Y %T %z"
+                  -- Support for hours:minutes
+                  , "%a, %e %b %Y %R GMT"
+                  , "%a, %e %b %Y %R %z"
+                  , "%e %b %Y %R GMT"
+                  , "%e %b %Y %R %z"
+                  ]
+
+  readRFC2822 t = foldr (tryP t') Nothing $ map p formatRFC2822
     where 
       p :: String -> String -> Maybe ZonedTime
       p f s = parseTime defaultTimeLocale f s

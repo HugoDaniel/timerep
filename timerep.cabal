@@ -1,5 +1,5 @@
 Name:          timerep
-Version:       1.0.1
+Version:       1.0.2
 Category:      Web, Time
 Synopsis:      Parse and display time according to some RFCs (RFC3339, RFC2822)
 Description:   
@@ -12,6 +12,8 @@ Description:
     This package defines a type class to parse and read time representations 
     specified in some RFC's.
     Right now there is only support for reading and showing String
+    .
+    Special thanks to Koral for all the suggestions and help in solving some bugs
     .
 Build-type:    Simple
 Maintainer:    Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
@@ -26,10 +28,13 @@ source-repository head
 
 library
   build-depends:
-    base < 5, time >= 1.2, old-locale
+    base < 5, 
+    time >= 1.2, 
+    old-locale
 
   exposed-modules:
     Data.Time.RFC3339
     Data.Time.RFC2822
 
   extensions: TypeSynonymInstances FlexibleInstances
+

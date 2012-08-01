@@ -44,6 +44,7 @@ test2 = "1996-12-19T16:39:57-08:00"
 test3 = "1990-12-31T23:59:60Z"
 test4 = "1990-12-31T15:59:60-08:00"
 test5 = "1937-01-01T12:00:27.87+00:20"
+tests :: [String]
 tests = [test1, test2, test3, test4, test5]
 testParse = length (catMaybes (map readRFC3339 tests)) == length tests
 
@@ -55,6 +56,7 @@ testParse = length (catMaybes (map readRFC3339 tests)) == length tests
 class RFC3339 a where
   showRFC3339 :: ZonedTime -> a
   readRFC3339 :: a -> Maybe ZonedTime
+  formatRFC3339 :: [a]
 
 -- | For now there is only an instance for the String data type
 instance RFC3339 String where
@@ -65,11 +67,12 @@ instance RFC3339 String where
       printZone = if timeZoneStr == timeZoneOffsetString utc
                     then "Z"
                     else take 3 timeZoneStr ++ ":" ++ drop 3 timeZoneStr
-  readRFC3339 t = foldr (tryP t) Nothing [ p "%FT%TZ"
-                                         , p "%FT%T%z"
-                                         , p "%FT%T%Q%z"
-                                         , p "%FT%T%QZ"
-                                         ]
+  formatRFC3339 = [ "%FT%TZ"
+                  , "%FT%T%z"
+                  , "%FT%T%Q%z"
+                  , "%FT%T%QZ"
+                  ]
+  readRFC3339 t = foldr (tryP t) Nothing $ map p formatRFC3339
     where 
       p :: String -> String -> Maybe ZonedTime
       p f s = parseTime defaultTimeLocale f s
