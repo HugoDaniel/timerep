@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE CPP, TypeSynonymInstances, FlexibleInstances #-}
 -- |                                                                               
 -- Module      : Data.Time.RFC3339
 -- Copyright   : (c) 2011 Hugo Daniel Gomes
@@ -33,11 +33,14 @@ module Data.Time.RFC3339 (
     RFC3339(showRFC3339, readRFC3339)
 ) where
 
+#if __GLASGOW_HASKELL__ < 710
+import System.Locale
+#endif
+
 import Data.Time.Format
 import Data.Time.LocalTime
 import Data.Time.Calendar
 import Data.Maybe 
-import System.Locale
 
 test1 = "1985-04-12T23:20:50.52Z"
 test2 = "1996-12-19T16:39:57-08:00"
