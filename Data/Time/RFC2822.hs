@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE CPP, TypeSynonymInstances, FlexibleInstances #-}
 -- |                                                                               
 -- Module      : Data.Time.RFC2822
 -- Copyright   : (c) 2011 Hugo Daniel Gomes
@@ -36,11 +36,14 @@ module Data.Time.RFC2822 (
     RFC2822(showRFC2822, readRFC2822)
 ) where
 
+#if __GLASGOW_HASKELL__ < 710
+import System.Locale
+#endif
+
 import Data.Time.Format
 import Data.Time.LocalTime
 import Data.Time.Calendar
 import Data.Maybe 
-import System.Locale
 import qualified Data.Attoparsec.Text as A
 import Data.Attoparsec.Text
 import qualified Data.Attoparsec.Combinator as AC
