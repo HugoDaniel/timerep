@@ -1,5 +1,5 @@
 Name:          timerep
-Version:       1.0.2
+Version:       1.0.3
 Category:      Web, Time
 Synopsis:      Parse and display time according to some RFCs (RFC3339, RFC2822)
 Description:   
