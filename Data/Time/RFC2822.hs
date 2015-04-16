@@ -1,5 +1,6 @@
-{-# LANGUAGE CPP, TypeSynonymInstances, FlexibleInstances #-}
--- |                                                                               
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+-- |
 -- Module      : Data.Time.RFC2822
 -- Copyright   : (c) 2011 Hugo Daniel Gomes
 --
@@ -36,17 +37,14 @@ module Data.Time.RFC2822 (
     RFC2822(showRFC2822, readRFC2822)
 ) where
 
-#if __GLASGOW_HASKELL__ < 710
-import System.Locale
-#endif
-
-import Data.Time.Format
-import Data.Time.LocalTime
-import Data.Time.Calendar
-import Data.Maybe 
-import qualified Data.Attoparsec.Text as A
-import Data.Attoparsec.Text
 import qualified Data.Attoparsec.Combinator as AC
+import           Data.Attoparsec.Text
+import qualified Data.Attoparsec.Text       as A
+import           Data.Maybe
+import           Data.Time.Calendar
+import           Data.Time.Format
+import           Data.Time.Locale.Compat
+import           Data.Time.LocalTime
 
 test1  = "Fri, 21 Nov 1997 09:55:06 -0600"
 test2  = "Tue, 15 Nov 1994 12:45:26 GMT"
