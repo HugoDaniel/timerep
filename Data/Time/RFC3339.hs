@@ -74,6 +74,4 @@ formatsRFC3339 = [ "%FT%TZ"
                  ]
 
 parseTimeRFC3339 :: (TextualMonoid t) => t -> Maybe ZonedTime
-parseTimeRFC3339 t = foldr (<|>) Nothing $ map parse formatsRFC3339
-    where parse :: (TextualMonoid t) => t -> Maybe ZonedTime
-          parse format = parseTime defaultTimeLocale (toString format) (toString t)
+parseTimeRFC3339 = parseTimeUsing formatsRFC3339

@@ -6,6 +6,7 @@ import           Data.Time.Calendar
 import           Data.Time.LocalTime
 import           Data.Time.RFC2822
 import           Data.Time.RFC3339
+import           Data.Time.RFC822
 
 import           Distribution.TestSuite.QuickCheck
 import           Test.QuickCheck                   hiding (Fixed)
@@ -63,6 +64,7 @@ tests :: IO [Test]
 tests = return
     [ testProperty "Inverse RFC 3339." prop_inverseRFC3339
     , testProperty "Inverse RFC 2822." prop_inverseRFC2822
+    , testProperty "Inverse RFC 822."  prop_inverseRFC822
     ]
 
 prop_inverseRFC3339 :: ZonedTime -> Bool
@@ -70,6 +72,9 @@ prop_inverseRFC3339 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC3339 . asText
 
 prop_inverseRFC2822 :: ZonedTime -> Bool
 prop_inverseRFC2822 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC2822 . asText . formatTimeRFC2822) zonedTime == Just (zonedTimeToUTC zonedTime)
+
+prop_inverseRFC822 :: ZonedTime -> Bool
+prop_inverseRFC822 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC822 . asText . formatTimeRFC822) zonedTime == Just (zonedTimeToUTC zonedTime)
 
 asText :: Text -> Text
 asText = id
