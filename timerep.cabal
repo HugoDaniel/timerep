@@ -30,7 +30,7 @@ library
     base < 5,
     monoid-subclasses,
     text,
-    time >= 1.2,
+    time >= 1.5,
     time-locale-compat,
     attoparsec
 

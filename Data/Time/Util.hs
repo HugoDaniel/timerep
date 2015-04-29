@@ -3,7 +3,9 @@ module Data.Time.Util where
 import           Control.Applicative
 
 import           Data.Function
+import           Data.Monoid (mempty)
 import           Data.Monoid.Textual hiding (foldr, map)
+import           Data.Time.Format (defaultTimeLocale)
 import           Data.Time
 
 
