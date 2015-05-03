@@ -1,6 +1,6 @@
 name:          timerep
 version:       2.0.0
-category:      Web, Time
+category:      Web, Time, Parser, Text
 synopsis:      Parse and display time according to some RFCs (RFC3339, RFC2822, RFC822)
 description:
     .
@@ -17,13 +17,18 @@ description:
 build-type:    Simple
 maintainer:    Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
 author:        Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
-copyright:     Hugo Daniel Gomes
+copyright:     (c) 2010-2015 Hugo Daniel Gomes
 cabal-version: >= 1.8
+homepage:      https://github.com/HugoDaniel/RFC3339
+bug-reports:   https://github.com/HugoDaniel/RFC3339/issues
 license:       BSD3
 license-file:  LICENSE
 source-repository head
   type:     git
-  location: git://github.com/HugoDaniel/RFC3339.git
+  location: https://github.com/HugoDaniel/RFC3339.git
+extra-source-files:
+  README.md,
+  CHANGES.md
 
 library
   build-depends:
@@ -43,6 +48,8 @@ library
     Data.Time.Util
 
   extensions: TypeSynonymInstances FlexibleInstances
+
+  ghc-options: -Wall
 
 test-suite Tests
   type: detailed-0.9
