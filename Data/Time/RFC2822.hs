@@ -53,23 +53,6 @@ import           Data.Time.Format
 import           Data.Time.LocalTime
 import           Data.Time.Util
 
-test1  = "Fri, 21 Nov 1997 09:55:06 -0600"
-test2  = "Tue, 15 Nov 1994 12:45:26 GMT"
-test3  = "Tue, 1 Jul 2003 10:52:37 +0200"
-test4  = "Thu, 13 Feb 1969 23:32:54 -0330"
-test5  = "Mon, 24 Nov 1997 14:22:01 -0800"
-test6  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330"
-test7  = "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)" -- Fails
-test8  = "24 Nov 1997 14:22:01 -0800"
-test9  = "15 Nov 1994 12:45:26 GMT"
-test10 = "Mon,24 Nov 1997 14:22:01 -0800"
-test11 = "Thu,\t13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)"  -- Fails
-test12 = "Thu, 13 Feb 1969 23:32 -0330 (Newfoundland Time)"  -- Fails
-tests :: [Text]
-tests = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10
-        , test11, test12]
-testParse = length (catMaybes (map parseTimeRFC2822 tests)) == length tests
-
 
 formatTimeRFC2822 :: (TextualMonoid t) => ZonedTime -> t
 formatTimeRFC2822 zt@(ZonedTime lt z) = fromString (formatTime defaultTimeLocale "%a, %e %b %Y %T" zt) <> fromString printZone
