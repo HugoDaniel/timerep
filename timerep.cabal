@@ -41,8 +41,6 @@ library
   other-modules:
     Data.Time.Util
 
-  extensions: TypeSynonymInstances FlexibleInstances
-
 test-suite Tests
   type: exitcode-stdio-1.0
   hs-source-dirs: test
