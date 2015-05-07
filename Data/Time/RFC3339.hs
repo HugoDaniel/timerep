@@ -38,13 +38,12 @@ module Data.Time.RFC3339 (
 import           Control.Applicative
 
 import           Data.Maybe
-import           Data.Monoid             ((<>))
-import           Data.Monoid.Textual     hiding (foldr, map)
-import           Data.String             (fromString)
-import           Data.Text               (Text)
+import           Data.Monoid         ((<>))
+import           Data.Monoid.Textual hiding (foldr, map)
+import           Data.String         (fromString)
+import           Data.Text           (Text)
 import           Data.Time.Calendar
 import           Data.Time.Format
-import           Data.Time.Locale.Compat
 import           Data.Time.LocalTime
 import           Data.Time.Util
 

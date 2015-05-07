@@ -50,7 +50,6 @@ import           Data.String                (fromString)
 import           Data.Text                  (Text)
 import           Data.Time.Calendar
 import           Data.Time.Format
-import           Data.Time.Locale.Compat
 import           Data.Time.LocalTime
 import           Data.Time.Util
 

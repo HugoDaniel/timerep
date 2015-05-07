@@ -31,7 +31,6 @@ library
     monoid-subclasses,
     text,
     time >= 1.5,
-    time-locale-compat,
     attoparsec
 
   exposed-modules:
@@ -54,6 +53,5 @@ test-suite Tests
     cabal-test-quickcheck,
     QuickCheck,
     text,
-    time >= 1.2,
-    time-locale-compat,
+    time >= 1.5,
     timerep >= 1.0
