@@ -29,24 +29,13 @@ module Data.Time.RFC822 (
 import           Control.Applicative
 
 import           Data.Maybe
-import           Data.Monoid.Textual     hiding (foldr, map)
-import           Data.String             (fromString)
-import           Data.Text               (Text)
+import           Data.Monoid.Textual hiding (foldr, map)
+import           Data.String         (fromString)
+import           Data.Text           (Text)
 import           Data.Time.Calendar
 import           Data.Time.Format
-import           Data.Time.Locale.Compat
 import           Data.Time.LocalTime
 import           Data.Time.Util
-
-
-test1 = "Wed, 02 Oct 2002 13:00:00 GMT"
-test2 = "Wed, 02 Oct 2002 13:00:00 +0100"
-test3 = "Wed, 02 Oct 2002 13:00 +0100"
-test4 = "02 Oct 2002 13:00 +0100"
-test5 = "02 Oct 02 13:00 +0100"
-tests :: [Text]
-tests = [test1, test2, test3, test4, test5]
-testParse = length (catMaybes (map parseTimeRFC822 tests)) == length tests
 
 
 formatTimeRFC822 :: (TextualMonoid t) => ZonedTime -> t

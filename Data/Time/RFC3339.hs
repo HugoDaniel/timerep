@@ -38,25 +38,14 @@ module Data.Time.RFC3339 (
 import           Control.Applicative
 
 import           Data.Maybe
-import           Data.Monoid             ((<>))
-import           Data.Monoid.Textual     hiding (foldr, map)
-import           Data.String             (fromString)
-import           Data.Text               (Text)
+import           Data.Monoid         ((<>))
+import           Data.Monoid.Textual hiding (foldr, map)
+import           Data.String         (fromString)
+import           Data.Text           (Text)
 import           Data.Time.Calendar
 import           Data.Time.Format
-import           Data.Time.Locale.Compat
 import           Data.Time.LocalTime
 import           Data.Time.Util
-
-
-test1 = "1985-04-12T23:20:50.52Z"
-test2 = "1996-12-19T16:39:57-08:00"
-test3 = "1990-12-31T23:59:60Z"
-test4 = "1990-12-31T15:59:60-08:00"
-test5 = "1937-01-01T12:00:27.87+00:20"
-tests :: [Text]
-tests = [test1, test2, test3, test4, test5]
-testParse = length (catMaybes (map parseTimeRFC3339 tests)) == length tests
 
 
 formatTimeRFC3339 :: (TextualMonoid t) => ZonedTime -> t

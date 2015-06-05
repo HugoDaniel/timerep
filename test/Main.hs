@@ -1,6 +1,5 @@
-module Test where
-
-import           Data.Fixed                        (E12, Fixed (..))
+import           Data.Fixed            (E12, Fixed (..))
+import           Data.Maybe
 import           Data.Text
 import           Data.Time.Calendar
 import           Data.Time.LocalTime
@@ -8,8 +7,10 @@ import           Data.Time.RFC2822
 import           Data.Time.RFC3339
 import           Data.Time.RFC822
 
-import           Distribution.TestSuite.QuickCheck
-import           Test.QuickCheck                   hiding (Fixed)
+import           Test.QuickCheck       hiding (Fixed)
+import           Test.Tasty
+import           Test.Tasty.HUnit
+import           Test.Tasty.QuickCheck
 
 
 instance Arbitrary TimeOfDay where
@@ -60,21 +61,55 @@ instance Arbitrary ZonedTime where
   arbitrary = ZonedTime <$> arbitrary <*> arbitrary
 
 
-tests :: IO [Test]
-tests = return
-    [ testProperty "Inverse RFC 3339." prop_inverseRFC3339
-    , testProperty "Inverse RFC 2822." prop_inverseRFC2822
-    , testProperty "Inverse RFC 822."  prop_inverseRFC822
-    ]
+main :: IO ()
+main = defaultMain $ testGroup "Tests" [unitTests, properties]
 
-prop_inverseRFC3339 :: ZonedTime -> Bool
-prop_inverseRFC3339 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC3339 . asText . formatTimeRFC3339) zonedTime == Just (zonedTimeToUTC zonedTime)
 
-prop_inverseRFC2822 :: ZonedTime -> Bool
-prop_inverseRFC2822 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC2822 . asText . formatTimeRFC2822) zonedTime == Just (zonedTimeToUTC zonedTime)
+unitTests :: TestTree
+unitTests = testGroup "Unit tests" [casesRFC3339 , casesRFC2822, casesRFC822]
 
-prop_inverseRFC822 :: ZonedTime -> Bool
-prop_inverseRFC822 zonedTime = (fmap zonedTimeToUTC . parseTimeRFC822 . asText . formatTimeRFC822) zonedTime == Just (zonedTimeToUTC zonedTime)
+casesRFC3339, casesRFC2822 :: TestTree
+casesRFC3339 = testCase "RFC 3339 cases" $ do
+  isJust (parseTimeRFC3339 "1985-04-12T23:20:50.52Z") @?= True
+  isJust (parseTimeRFC3339 "1996-12-19T16:39:57-08:00") @?= True
+  isJust (parseTimeRFC3339 "1990-12-31T23:59:60Z") @?= True
+  isJust (parseTimeRFC3339 "1990-12-31T15:59:60-08:00") @?= True
+  isJust (parseTimeRFC3339 "1937-01-01T12:00:27.87+00:20") @?= True
+casesRFC2822 = testCase "RFC 2822 cases" $ do
+  isJust (parseTimeRFC2822 "Fri, 21 Nov 1997 09:55:06 -0600") @?= True
+  isJust (parseTimeRFC2822 "Tue, 15 Nov 1994 12:45:26 GMT") @?= True
+  isJust (parseTimeRFC2822 "Tue, 1 Jul 2003 10:52:37 +0200") @?= True
+  isJust (parseTimeRFC2822 "Thu, 13 Feb 1969 23:32:54 -0330") @?= True
+  isJust (parseTimeRFC2822 "Mon, 24 Nov 1997 14:22:01 -0800") @?= True
+  isJust (parseTimeRFC2822 "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330") @?= True
+  isJust (parseTimeRFC2822 "Thu,          13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)") @?= False
+  isJust (parseTimeRFC2822 "24 Nov 1997 14:22:01 -0800") @?= True
+  isJust (parseTimeRFC2822 "15 Nov 1994 12:45:26 GMT") @?= True
+  isJust (parseTimeRFC2822 "Mon,24 Nov 1997 14:22:01 -0800") @?= False
+  isJust (parseTimeRFC2822 "Thu,\t13\n     Feb\n  1969\n        23:32\n     -0330 (Newfoundland Time)") @?= False
+  isJust (parseTimeRFC2822 "Thu, 13 Feb 1969 23:32 -0330 (Newfoundland Time)") @?= False
+casesRFC822 = testCase "RFC 822 cases" $ do
+  isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00:00 GMT") @?= True
+  isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00:00 +0100") @?= True
+  isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00 +0100") @?= True
+  isJust (parseTimeRFC822 "02 Oct 2002 13:00 +0100") @?= True
+  isJust (parseTimeRFC822 "02 Oct 02 13:00 +0100") @?= True
+
+
+properties :: TestTree
+properties = testGroup "Properties"
+  [ inverseRFC3339Property
+  , inverseRFC2822Property
+  , inverseRFC822Property
+  ]
+
+inverseRFC3339Property, inverseRFC2822Property, inverseRFC822Property :: TestTree
+inverseRFC3339Property = testProperty "parse . format = id (RFC3339)" $ \zonedTime ->
+  (fmap zonedTimeToUTC . parseTimeRFC3339 . asText . formatTimeRFC3339) zonedTime == Just (zonedTimeToUTC zonedTime)
+inverseRFC2822Property = testProperty "parse . format = id (RFC2822)" $ \zonedTime ->
+  (fmap zonedTimeToUTC . parseTimeRFC2822 . asText . formatTimeRFC2822) zonedTime == Just (zonedTimeToUTC zonedTime)
+inverseRFC822Property = testProperty "parse . format = id (RFC822)" $ \zonedTime ->
+  (fmap zonedTimeToUTC . parseTimeRFC822 . asText . formatTimeRFC822) zonedTime == Just (zonedTimeToUTC zonedTime)
 
 asText :: Text -> Text
 asText = id

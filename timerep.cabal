@@ -31,7 +31,6 @@ library
     monoid-subclasses,
     text,
     time >= 1.5,
-    time-locale-compat,
     attoparsec
 
   exposed-modules:
@@ -42,18 +41,16 @@ library
   other-modules:
     Data.Time.Util
 
-  extensions: TypeSynonymInstances FlexibleInstances
-
 test-suite Tests
-  type: detailed-0.9
+  type: exitcode-stdio-1.0
   hs-source-dirs: test
-  test-module: Test
+  main-is: Main.hs
   build-depends:
     base < 5,
-    Cabal >= 1.20.0,
-    cabal-test-quickcheck,
     QuickCheck,
+    tasty,
+    tasty-hunit,
+    tasty-quickcheck,
     text,
-    time >= 1.2,
-    time-locale-compat,
-    timerep >= 1.0
+    time >= 1.5,
+    timerep >= 2
