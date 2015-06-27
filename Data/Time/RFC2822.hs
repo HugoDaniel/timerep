@@ -76,9 +76,9 @@ formatsRFC2822 = [ "%a, %e %b %Y %T GMT"
 parseTimeRFC2822 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC2822 t = foldr (<|>) Nothing $ map parse formatsRFC2822
   where parse :: (TextualMonoid t) => t -> Maybe ZonedTime
-        parse format = parseTime defaultTimeLocale (toString format) t'
+        parse format = parseTime defaultTimeLocale (toString' format) t'
 
         -- t' is a trimmed t (currently only \n is trimmed)
         -- TODO: trim other white space characters
         t' :: String
-        t' = lines (toString t) >>= ("" ++)
+        t' = lines (toString' t) >>= ("" ++)
