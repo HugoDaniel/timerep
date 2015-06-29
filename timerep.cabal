@@ -23,12 +23,13 @@ homepage:      https://github.com/HugoDaniel/timerep
 bug-reports:   https://github.com/HugoDaniel/timerep/issues
 license:       BSD3
 license-file:  LICENSE
-source-repository head
-  type:     git
-  location: git://github.com/HugoDaniel/timerep.git
 extra-source-files:
   README.md,
   CHANGES.md
+
+source-repository head
+  type:     git
+  location: git://github.com/HugoDaniel/timerep.git
 
 library
   build-depends:
