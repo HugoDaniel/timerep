@@ -28,7 +28,7 @@ source-repository head
 library
   build-depends:
     base < 5,
-    monoid-subclasses,
+    monoid-subclasses >= 0.4.1,
     text,
     time >= 1.5,
     attoparsec
