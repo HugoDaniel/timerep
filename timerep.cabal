@@ -23,7 +23,7 @@ license:       BSD3
 license-file:  LICENSE
 source-repository head
   type:     git
-  location: git://github.com/HugoDaniel/RFC3339.git
+  location: git://github.com/HugoDaniel/timerep.git
 
 library
   build-depends:
