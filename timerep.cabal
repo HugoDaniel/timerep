@@ -3,17 +3,17 @@ version:       2.0.0
 category:      Web, Time, Parser, Text
 synopsis:      Parse and display time according to some RFCs (RFC3339, RFC2822, RFC822)
 description:
-    .
     Parse and display time according to some RFC's.
     .
     Supported:
     .
       * RFC822 <http://www.ietf.org/rfc/rfc0822.txt>
+    .
       * RFC2822 <http://www.ietf.org/rfc/rfc2822.txt>
+    .
       * RFC3339 <http://www.ietf.org/rfc/rfc3339.txt>
     .
-    Special thanks to Koral for all the suggestions and help in solving some bugs
-    .
+    Special thanks to Koral for all the suggestions and help in solving some bugs.
 build-type:    Simple
 maintainer:    Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
 author:        Hugo Daniel Gomes <mr.hugo.gomes@gmail.com>
