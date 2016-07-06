@@ -92,8 +92,10 @@ casesRFC822 = testCase "RFC 822 cases" $ do
   isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00:00 GMT") @?= True
   isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00:00 +0100") @?= True
   isJust (parseTimeRFC822 "Wed, 02 Oct 2002 13:00 +0100") @?= True
+  isJust (parseTimeRFC822 "Wed, 2 Oct 2002 13:00 +0100") @?= True
   isJust (parseTimeRFC822 "02 Oct 2002 13:00 +0100") @?= True
   isJust (parseTimeRFC822 "02 Oct 02 13:00 +0100") @?= True
+  isJust (parseTimeRFC822 "2 Oct 02 13:00 +0100") @?= True
 
 
 properties :: TestTree

@@ -42,22 +42,22 @@ formatTimeRFC822 :: (TextualMonoid t) => ZonedTime -> t
 formatTimeRFC822 zonedTime = fromString $ formatTime defaultTimeLocale "%a, %d %b %Y %X %z" zonedTime
 
 formatsRFC822 :: [Text]
-formatsRFC822 = [ "%a, %d %b %y %X %z"
-                , "%a, %d %b %y %X %Z"
-                , "%a, %d %b %y %H:%M %z"
-                , "%a, %d %b %y %H:%M %Z"
-                , "%a, %d %b %Y %X %z"
-                , "%a, %d %b %Y %X %Z"
-                , "%a, %d %b %Y %H:%M %z"
-                , "%a, %d %b %Y %H:%M %Z"
-                , "%d %b %y %X %z"
-                , "%d %b %y %X %Z"
-                , "%d %b %y %H:%M %z"
-                , "%d %b %y %H:%M %Z"
-                , "%d %b %Y %X %z"
-                , "%d %b %Y %X %Z"
-                , "%d %b %Y %H:%M %z"
-                , "%d %b %Y %H:%M %Z"
+formatsRFC822 = [ "%a, %e %b %y %X %z"
+                , "%a, %e %b %y %X %Z"
+                , "%a, %e %b %y %H:%M %z"
+                , "%a, %e %b %y %H:%M %Z"
+                , "%a, %e %b %Y %X %z"
+                , "%a, %e %b %Y %X %Z"
+                , "%a, %e %b %Y %H:%M %z"
+                , "%a, %e %b %Y %H:%M %Z"
+                , "%e %b %y %X %z"
+                , "%e %b %y %X %Z"
+                , "%e %b %y %H:%M %z"
+                , "%e %b %y %H:%M %Z"
+                , "%e %b %Y %X %z"
+                , "%e %b %Y %X %Z"
+                , "%e %b %Y %H:%M %z"
+                , "%e %b %Y %H:%M %Z"
                 ]
 
 parseTimeRFC822 :: (TextualMonoid t) => t -> Maybe ZonedTime
