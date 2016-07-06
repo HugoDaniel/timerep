@@ -56,11 +56,10 @@ formatTimeRFC3339 zt@(ZonedTime lt z) = fromString (formatTime defaultTimeLocale
                     else take 3 timeZoneStr <> ":" <> drop 3 timeZoneStr
 
 formatsRFC3339 :: [Text]
-formatsRFC3339 = [ "%FT%TZ"
-                 , "%FT%T%z"
-                 , "%FT%T%Q%z"
-                 , "%FT%T%QZ"
-                 ]
+formatsRFC3339 = do
+  fraction <- ["%Q", ""]
+  zone <- ["Z", "%z"]
+  return $ "%FT%T" <> fraction <> zone
 
 parseTimeRFC3339 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC3339 = parseTimeUsing formatsRFC3339

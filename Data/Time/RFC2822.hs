@@ -62,16 +62,11 @@ formatTimeRFC2822 zt@(ZonedTime lt z) = fromString (formatTime defaultTimeLocale
                     else " " ++ timeZoneStr
 
 formatsRFC2822 :: [Text]
-formatsRFC2822 = [ "%a, %e %b %Y %T GMT"
-                 , "%a, %e %b %Y %T %z"
-                 , "%e %b %Y %T GMT"
-                 , "%e %b %Y %T %z"
-                 -- Support for hours:minutes
-                 , "%a, %e %b %Y %R GMT"
-                 , "%a, %e %b %Y %R %z"
-                 , "%e %b %Y %R GMT"
-                 , "%e %b %Y %R %z"
-                 ]
+formatsRFC2822 = do
+  day  <- ["%a, ", ""]
+  time <- ["%T", "%R"]   -- Support for hours:minutes
+  zone <- ["GMT", "%z"]
+  return $ day <> "%e %b %Y " <> time <> " " <> zone
 
 parseTimeRFC2822 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC2822 t = foldr (<|>) Nothing $ map parse formatsRFC2822

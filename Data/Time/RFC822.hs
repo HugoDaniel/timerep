@@ -29,6 +29,7 @@ module Data.Time.RFC822 (
 import           Control.Applicative
 
 import           Data.Maybe
+import           Data.Monoid         ((<>))
 import           Data.Monoid.Textual hiding (foldr, map)
 import           Data.String         (fromString)
 import           Data.Text           (Text)
@@ -42,23 +43,12 @@ formatTimeRFC822 :: (TextualMonoid t) => ZonedTime -> t
 formatTimeRFC822 zonedTime = fromString $ formatTime defaultTimeLocale "%a, %d %b %Y %X %z" zonedTime
 
 formatsRFC822 :: [Text]
-formatsRFC822 = [ "%a, %e %b %y %X %z"
-                , "%a, %e %b %y %X %Z"
-                , "%a, %e %b %y %H:%M %z"
-                , "%a, %e %b %y %H:%M %Z"
-                , "%a, %e %b %Y %X %z"
-                , "%a, %e %b %Y %X %Z"
-                , "%a, %e %b %Y %H:%M %z"
-                , "%a, %e %b %Y %H:%M %Z"
-                , "%e %b %y %X %z"
-                , "%e %b %y %X %Z"
-                , "%e %b %y %H:%M %z"
-                , "%e %b %y %H:%M %Z"
-                , "%e %b %Y %X %z"
-                , "%e %b %Y %X %Z"
-                , "%e %b %Y %H:%M %z"
-                , "%e %b %Y %H:%M %Z"
-                ]
+formatsRFC822 = do
+  day  <- ["%a, ", ""]
+  year <- ["%y", "%Y"]
+  time <- ["%X", "%H:%M"]
+  zone <- ["%z", "%Z"]
+  return $ day <> "%e %b " <> year <> " " <> time <> " " <> zone
 
 parseTimeRFC822 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC822 = parseTimeUsing formatsRFC822
