@@ -32,7 +32,7 @@
 module Data.Time.RFC3339 (
     -- * Basic type class
     -- $basic
-    formatTimeRFC3339, parseTimeRFC3339
+    formatTimeRFC3339, formatDateRFC3339, parseTimeRFC3339, parseDateRFC3339
 ) where
 
 import           Control.Applicative
@@ -55,6 +55,9 @@ formatTimeRFC3339 zt@(ZonedTime lt z) = fromString (formatTime defaultTimeLocale
                     then "Z"
                     else take 3 timeZoneStr <> ":" <> drop 3 timeZoneStr
 
+formatDateRFC3339 :: (TextualMonoid t, FormatTime time) => time -> t
+formatDateRFC3339 day = fromString (formatTime defaultTimeLocale "%F" day)
+
 formatsRFC3339 :: [Text]
 formatsRFC3339 = do
   fraction <- ["%Q", ""]
@@ -63,3 +66,6 @@ formatsRFC3339 = do
 
 parseTimeRFC3339 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC3339 = parseTimeUsing formatsRFC3339
+
+parseDateRFC3339 :: (TextualMonoid t) => t -> Maybe Day
+parseDateRFC3339 = parseTimeUsing ["%F" :: Text]

@@ -75,6 +75,10 @@ casesRFC3339 = testCase "RFC 3339 cases" $ do
   isJust (parseTimeRFC3339 "1990-12-31T23:59:60Z") @?= True
   isJust (parseTimeRFC3339 "1990-12-31T15:59:60-08:00") @?= True
   isJust (parseTimeRFC3339 "1937-01-01T12:00:27.87+00:20") @?= True
+  isJust (parseDateRFC3339 "1985-04-12") @?= True
+  isJust (parseDateRFC3339 "1996-12-19") @?= True
+  isJust (parseDateRFC3339 "1990-12-31") @?= True
+  isJust (parseDateRFC3339 "1937-01-01") @?= True
 casesRFC2822 = testCase "RFC 2822 cases" $ do
   isJust (parseTimeRFC2822 "Fri, 21 Nov 1997 09:55:06 -0600") @?= True
   isJust (parseTimeRFC2822 "Tue, 15 Nov 1994 12:45:26 GMT") @?= True
@@ -100,14 +104,17 @@ casesRFC822 = testCase "RFC 822 cases" $ do
 
 properties :: TestTree
 properties = testGroup "Properties"
-  [ inverseRFC3339Property
+  [ inverseTimeRFC3339Property
+  , inverseDateRFC3339Property
   , inverseRFC2822Property
   , inverseRFC822Property
   ]
 
-inverseRFC3339Property, inverseRFC2822Property, inverseRFC822Property :: TestTree
-inverseRFC3339Property = testProperty "parse . format = id (RFC3339)" $ \zonedTime ->
+inverseTimeRFC3339Property, inverseDateRFC3339Property, inverseRFC2822Property, inverseRFC822Property :: TestTree
+inverseTimeRFC3339Property = testProperty "parse . format = id (RFC3339 date-time)" $ \zonedTime ->
   (fmap zonedTimeToUTC . parseTimeRFC3339 . asText . formatTimeRFC3339) zonedTime == Just (zonedTimeToUTC zonedTime)
+inverseDateRFC3339Property = testProperty "parse . format = id (RFC3339 date)" $ \day ->
+  (parseDateRFC3339 . asText . formatDateRFC3339) day == Just day
 inverseRFC2822Property = testProperty "parse . format = id (RFC2822)" $ \zonedTime ->
   (fmap zonedTimeToUTC . parseTimeRFC2822 . asText . formatTimeRFC2822) zonedTime == Just (zonedTimeToUTC zonedTime)
 inverseRFC822Property = testProperty "parse . format = id (RFC822)" $ \zonedTime ->
