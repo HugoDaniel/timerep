@@ -37,7 +37,7 @@ library
     base < 5,
     monoid-subclasses >= 0.4.1,
     text,
-    time >= 1.5,
+    time >= 1.9,
     attoparsec
 
   exposed-modules:
@@ -62,5 +62,5 @@ test-suite Tests
     tasty-hunit,
     tasty-quickcheck,
     text,
-    time >= 1.5,
+    time >= 1.9,
     timerep >= 2

@@ -49,7 +49,7 @@ import           Data.Monoid.Textual        hiding (foldr, map)
 import           Data.String                (fromString)
 import           Data.Text                  (Text)
 import           Data.Time.Calendar
-import           Data.Time.Format
+import           Data.Time.Format           (defaultTimeLocale, formatTime, parseTimeM)
 import           Data.Time.LocalTime
 import           Data.Time.Util
 
@@ -71,9 +71,8 @@ formatsRFC2822 = do
 parseTimeRFC2822 :: (TextualMonoid t) => t -> Maybe ZonedTime
 parseTimeRFC2822 t = foldr (<|>) Nothing $ map parse formatsRFC2822
   where parse :: (TextualMonoid t) => t -> Maybe ZonedTime
-        parse format = parseTime defaultTimeLocale (toString' format) t'
+        parse format = parseTimeM True defaultTimeLocale (toString' format) t'
 
         -- t' is a trimmed t (currently only \n is trimmed)
-        -- TODO: trim other white space characters
         t' :: String
         t' = lines (toString' t) >>= ("" ++)
